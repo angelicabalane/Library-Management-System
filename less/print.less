@@ -1,54 +1,101 @@
-/*
- * Misc: print
- * -----------
- */
+/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+
+// ==========================================================================
+// Print styles.
+// Inlined to avoid the additional HTTP request: h5bp.com/r
+// ==========================================================================
+
 @media print {
-  //Add to elements that you do not want to show when printing
-  .no-print {
-    display: none !important;
-  }
-
-  //Elements that we want to hide when printing
-  .main-sidebar,
-  .left-side,
-  .main-header,
-  .content-header {
-    &:extend(.no-print);
-  }
-
-  //This is the only element that should appear, so let's remove the margins
-  .content-wrapper,
-  .right-side,
-  .main-footer {
-    margin-left: 0 !important;
-    min-height: 0 !important;
-    .translate(0, 0) !important;
-  }
-
-  .fixed .content-wrapper,
-  .fixed .right-side {
-    padding-top: 0 !important;
-  }
-
-  //Invoice printing
-  .invoice {
-    width: 100%;
-    border: 0;
-    margin: 0;
-    padding: 0;
-  }
-
-  .invoice-col {
-    float: left;
-    width: 33.3333333%;
-  }
-
-  //Make sure table content displays properly
-  .table-responsive {
-    overflow: auto;
-    > .table tr th,
-    > .table tr td {
-      white-space: normal !important;
+    *,
+    *:before,
+    *:after {
+        background: transparent !important;
+        color: #000 !important; // Black prints faster: h5bp.com/s
+        box-shadow: none !important;
+        text-shadow: none !important;
     }
-  }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    // Don't show links that are fragment identifiers,
+    // or use the `javascript:` pseudo protocol
+    a[href^="#"]:after,
+    a[href^="javascript:"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; // h5bp.com/t
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    // Bootstrap specific changes start
+
+    // Bootstrap components
+    .navbar {
+        display: none;
+    }
+    .btn,
+    .dropup > .btn {
+        > .caret {
+            border-top-color: #000 !important;
+        }
+    }
+    .label {
+        border: 1px solid #000;
+    }
+
+    .table {
+        border-collapse: collapse !important;
+
+        td,
+        th {
+            background-color: #fff !important;
+        }
+    }
+    .table-bordered {
+        th,
+        td {
+            border: 1px solid #ddd !important;
+        }
+    }
+
+    // Bootstrap specific changes end
 }
