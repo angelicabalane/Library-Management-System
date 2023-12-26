@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 09:38 PM
--- Server version: 10.1.19-MariaDB
--- PHP Version: 5.5.38
+-- Generation Time: Dec 24, 2023 at 06:31 AM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -24,18 +25,26 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteBook` (INOUT `id` INT(25))  NO SQL
-DELETE FROM books WHERE books.id=id$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteBook` (INOUT `id` INT(25))  NO SQL DELETE FROM books WHERE books.id=id$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBookList` ()  NO SQL
-SELECT books.title, books.author, books.isbn, category.name
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteBorrower` (IN `id` INT(11))  NO SQL DELETE FROM borrow WHERE borrow.id=id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteCategory` (INOUT `id` INT(11))   DELETE FROM category WHERE category.id=id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteCourse` (IN `id` INT(11))  NO SQL DELETE FROM course WHERE course.id=id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteReturnedBook` (IN `id` INT(11))  NO SQL DELETE FROM returns WHERE returns.id=id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteStudent` (IN `id` INT(11))  NO SQL DELETE FROM students WHERE students.id=id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBookList` ()  NO SQL SELECT books.title, books.author, books.isbn, category.name
 FROM books INNER JOIN category ON books.category_id = category.id$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertNewBook` (IN `isbn` VARCHAR(20), IN `category_id` INT(11), IN `title` TEXT, IN `author` VARCHAR(150), IN `publisher` VARCHAR(150), IN `publisher_date` DATE, IN `status` INT(1))  NO SQL
-INSERT INTO books (id, isbn, category_id, title, author, publisher, publish_date, status) VALUES (null, isbn, category_id, title, author, publisher, publish_date, status)$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertNewBook` (IN `isbn` VARCHAR(20), IN `category_id` INT(11), IN `title` TEXT, IN `author` VARCHAR(150), IN `publisher` VARCHAR(150), IN `publish_date` DATE, IN `status` INT(1))  NO SQL INSERT INTO books (id, isbn, category_id, title, author, publisher, publish_date, status) VALUES (null, isbn, category_id, title, author, publisher, publish_date, status)$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBookTitle` (INOUT `id` INT(25), INOUT `title` VARCHAR(100))  NO SQL
-UPDATE books SET title=title WHERE books.id=id$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertNewCourse` (IN `title` VARCHAR(100), IN `code` VARCHAR(11))   INSERT INTO course (id, title, code) VALUES (null, title, code)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBookTitle` (INOUT `id` INT(25), INOUT `title` VARCHAR(100))  NO SQL UPDATE books SET title=title WHERE books.id=id$$
 
 DELIMITER ;
 
@@ -86,20 +95,20 @@ CREATE TABLE `books` (
 INSERT INTO `books` (`id`, `isbn`, `category_id`, `title`, `author`, `publisher`, `publish_date`, `status`) VALUES
 (1, '9780553418026', 13, 'The Martian Andy Weir', 'Andy Weir', 'Crown ', '2014-02-11', 0),
 (2, '9781250316776', 12, 'Red, White and Royal Blue', 'Casey McQuiston', 'St Martins Griffin', '2021-02-02', 0),
-(3, '9781612681122', 3, 'Rich Dad, Poor Dad', 'Robert Kiyosaki', 'Plata Publishing, LLC.', '2022-04-05', 0),
+(3, '9781612681122', 3, 'Rich Dad, Poor Dad', 'Robert Kiyosaki', 'Plata Publishing, LLC.', '2022-04-05', 1),
 (4, '9781779501127', 5, 'Watchmer', 'Alan Moore', 'DC Comics', '2019-05-20', 0),
 (5, '9780316556347', 7, 'Circe', 'Madeline Miller', 'Little, Brown and Company', '2018-04-10', 0),
-(6, '9780140275360', 1, 'The Iliad Homer', 'Homer', 'Penguin Publishing Group', '1998-11-01', 0),
 (7, '9789655753011', 9, 'The Boy from Block 66', 'Limor Regev', 'Valcal Software Ltd', '2022-12-19', 0),
 (8, '9798835444670', 10, 'The Intimate', 'Freida McFadden', 'Poisoned Pen Press', '2022-06-11', 0),
 (9, '9781478927662', 14, 'Michael Jordan: The Life', 'Roland Lazenby', 'Little, Brown & Company', '2014-05-27', 0),
-(10, '9780593420256', 15, 'New York City', 'Pico Iyer ', 'Riverhead Books', '2023-01-10', 0),
+(10, '9780593420256', 15, 'New York City', 'Pico Iyer ', 'Riverhead Books', '2023-01-10', 1),
 (11, '9780300203318', 8, 'Yves Saint Laurent', 'Pierre Berge', 'Metropolitan Museum of Art ', '2013-09-10', 1),
 (12, '9781786850249', 4, 'Never Stop Dreaming', 'Ellen Mills', 'Summersdale', '2018-06-01', 0),
 (13, '9781400052189', 2, 'The Immortal Life of Henrietta Lacks\n', 'Rebecca Skloot', 'Crown Publishers', '2011-03-08', 0),
-(14, '9780525428145', 11, 'The Laws of Human', 'Robert Greene', 'Viking', '2018-10-23', 0),
+(14, '9780525428145', 11, 'The Laws of Human', 'Robert Greene', 'Viking', '2018-10-23', 1),
 (15, '9780593536407', 6, 'The Dictionary People', 'Sarah Ogilvia', 'Knopf', '2023-10-17', 0),
-(17, '9781603095273', 5, 'But You Have Friends', 'Emilia McKenzie', 'Top Shelf Productions', '0000-00-00', 0);
+(18, '9780439023481', 7, 'The Hunger Games', 'Suzanne Collins', 'Scholastic', '2008-09-14', 0),
+(19, '9780545069670', 0, '0', 'J.K. Rowling', 'Scholastic Corporation', '1997-06-26', 0);
 
 --
 -- Triggers `books`
@@ -130,7 +139,7 @@ CREATE TABLE `book_audit` (
   `author` varchar(100) NOT NULL,
   `publisher` varchar(100) NOT NULL,
   `action` varchar(10) NOT NULL,
-  `update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `update` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -140,12 +149,29 @@ CREATE TABLE `book_audit` (
 INSERT INTO `book_audit` (`id`, `isbn`, `title`, `author`, `publisher`, `action`, `update`) VALUES
 (16, '9780140707342', 'Hamlet', 'William Shakespeare', 'Simon and Schuster', 'DELETE', '2023-12-08 20:21:40'),
 (17, '9781603095273', 'But You Have Friends', 'Emilia McKenzie', 'Top Shelf Productions', 'INSERT', '2023-12-08 20:35:24'),
-(17, '9781603095273', 'But You Have Friends', 'Emilia McKenzie', 'Top Shelf Productions', 'UPDATE', '2023-12-08 20:38:04');
+(17, '9781603095273', 'But You Have Friends', 'Emilia McKenzie', 'Top Shelf Productions', 'UPDATE', '2023-12-08 20:38:04'),
+(14, '9780525428145', 'The Laws of Human', 'Robert Greene', 'Viking', 'UPDATE', '2023-12-10 06:10:50'),
+(17, '9781603095273', 'But You Have Friends', 'Emilia McKenzie', 'Top Shelf Productions', 'DELETE', '2023-12-10 06:12:52'),
+(10, '9780593420256', 'New York City', 'Pico Iyer ', 'Riverhead Books', 'UPDATE', '2023-12-10 06:19:39'),
+(10, '9780593420256', 'New York City', 'Pico Iyer ', 'Riverhead Books', 'UPDATE', '2023-12-10 06:21:02'),
+(13, '9781400052189', 'The Immortal Life of Henrietta Lacks\n', 'Rebecca Skloot', 'Crown Publishers', 'UPDATE', '2023-12-10 06:23:42'),
+(13, '9781400052189', 'The Immortal Life of Henrietta Lacks\n', 'Rebecca Skloot', 'Crown Publishers', 'UPDATE', '2023-12-10 06:24:10'),
+(10, '9780593420256', 'New York City', 'Pico Iyer ', 'Riverhead Books', 'UPDATE', '2023-12-10 06:37:35'),
+(5, '9780316556347', 'Circe', 'Madeline Miller', 'Little, Brown and Company', 'UPDATE', '2023-12-10 06:38:53'),
+(5, '9780316556347', 'Circe', 'Madeline Miller', 'Little, Brown and Company', 'UPDATE', '2023-12-10 06:39:36'),
+(4, '9781779501127', 'Watchmer', 'Alan Moore', 'DC Comics', 'UPDATE', '2023-12-10 07:19:44'),
+(4, '9781779501127', 'Watchmer', 'Alan Moore', 'DC Comics', 'UPDATE', '2023-12-10 07:20:59'),
+(3, '9781612681122', 'Rich Dad, Poor Dad', 'Robert Kiyosaki', 'Plata Publishing, LLC.', 'UPDATE', '2023-12-10 08:31:42'),
+(6, '9780140275360', 'The Iliad Homer', 'Homer', 'Penguin Publishing Group', 'DELETE', '2023-12-15 09:09:25'),
+(18, '9780439023481', '0', 'Suzanne Collins', 'Scholastic', 'INSERT', '2023-12-15 13:21:30'),
+(18, '9780439023481', '0', 'Suzanne Collins', 'Scholastic', 'UPDATE', '2023-12-15 13:21:58'),
+(19, '9780545069670', '0', 'J.K. Rowling', 'Scholastic Corporation', 'INSERT', '2023-12-16 16:55:05');
 
 -- --------------------------------------------------------
 
 --
 -- Stand-in structure for view `book_view`
+-- (See below for the actual view)
 --
 CREATE TABLE `book_view` (
 `TOTAL_BOOKS` bigint(21)
@@ -171,7 +197,14 @@ CREATE TABLE `borrow` (
 
 INSERT INTO `borrow` (`id`, `student_id`, `book_id`, `date_borrow`, `status`) VALUES
 (19, 1, 2, '2023-12-09', 1),
-(20, 1, 11, '2023-12-09', 0);
+(20, 1, 11, '2023-12-09', 0),
+(21, 1, 14, '2023-12-10', 0),
+(22, 4, 10, '2023-12-10', 1),
+(23, 3, 13, '2023-12-10', 1),
+(24, 4, 10, '2023-12-10', 0),
+(25, 4, 5, '2023-12-10', 1),
+(26, 4, 4, '2023-12-10', 1),
+(27, 1, 3, '2023-12-10', 0);
 
 --
 -- Triggers `borrow`
@@ -201,7 +234,7 @@ CREATE TABLE `borrow_audit` (
   `book_id` int(100) NOT NULL,
   `date_borrow` date NOT NULL,
   `action` varchar(10) NOT NULL,
-  `update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `update` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -210,7 +243,18 @@ CREATE TABLE `borrow_audit` (
 
 INSERT INTO `borrow_audit` (`id`, `student_id`, `book_id`, `date_borrow`, `action`, `update`) VALUES
 (20, 1, 11, '2023-12-09', 'INSERT', '2023-12-08 18:19:51'),
-(19, 1, 2, '2023-12-09', 'UPDATE', '2023-12-08 18:20:32');
+(19, 1, 2, '2023-12-09', 'UPDATE', '2023-12-08 18:20:32'),
+(21, 1, 14, '2023-12-10', 'INSERT', '2023-12-10 06:10:50'),
+(22, 4, 10, '2023-12-10', 'INSERT', '2023-12-10 06:19:39'),
+(22, 4, 10, '2023-12-10', 'UPDATE', '2023-12-10 06:21:02'),
+(23, 3, 13, '2023-12-10', 'INSERT', '2023-12-10 06:23:42'),
+(23, 3, 13, '2023-12-10', 'UPDATE', '2023-12-10 06:24:10'),
+(24, 4, 10, '2023-12-10', 'INSERT', '2023-12-10 06:37:35'),
+(25, 4, 5, '2023-12-10', 'INSERT', '2023-12-10 06:38:53'),
+(25, 4, 5, '2023-12-10', 'UPDATE', '2023-12-10 06:39:36'),
+(26, 4, 4, '2023-12-10', 'INSERT', '2023-12-10 07:19:44'),
+(26, 4, 4, '2023-12-10', 'UPDATE', '2023-12-10 07:20:59'),
+(27, 1, 3, '2023-12-10', 'INSERT', '2023-12-10 08:31:42');
 
 -- --------------------------------------------------------
 
@@ -235,7 +279,6 @@ INSERT INTO `category` (`id`, `name`) VALUES
 (5, 'Comic'),
 (6, 'Dictionary'),
 (7, 'Fantasy'),
-(8, 'Fashion'),
 (9, 'History'),
 (10, 'Horror'),
 (11, 'Political'),
@@ -265,12 +308,14 @@ INSERT INTO `course` (`id`, `title`, `code`) VALUES
 (1, 'Bachelor of Science in Information Systems', 'BSIS'),
 (2, 'Bachelor of Science in Computer Science', 'BSCS'),
 (3, 'Bachelor of Science in Information System', 'BSIT'),
-(4, 'Bachelor of Science in Entertainment and Multimedia Computing', 'BSEMC');
+(4, 'Bachelor of Science in Entertainment and Multimedia Computing', 'BSEMC'),
+(6, 'Bachelor of Science in Computer Engineering', 'BSCpE');
 
 -- --------------------------------------------------------
 
 --
 -- Stand-in structure for view `library_summary_view`
+-- (See below for the actual view)
 --
 CREATE TABLE `library_summary_view` (
 `isbn` varchar(20)
@@ -298,7 +343,11 @@ CREATE TABLE `returns` (
 --
 
 INSERT INTO `returns` (`id`, `student_id`, `book_id`, `date_return`) VALUES
-(5, 1, 2, '2023-12-09');
+(5, 1, 2, '2023-12-09'),
+(6, 4, 10, '2023-12-10'),
+(7, 3, 13, '2023-12-10'),
+(8, 4, 5, '2023-12-10'),
+(9, 4, 4, '2023-12-10');
 
 --
 -- Triggers `returns`
@@ -328,7 +377,7 @@ CREATE TABLE `returns_audit` (
   `book_id` int(100) NOT NULL,
   `date_return` date NOT NULL,
   `action` varchar(10) NOT NULL,
-  `update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `update` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -336,7 +385,11 @@ CREATE TABLE `returns_audit` (
 --
 
 INSERT INTO `returns_audit` (`id`, `student_id`, `book_id`, `date_return`, `action`, `update`) VALUES
-(5, 1, 2, '2023-12-09', 'INSERT', '2023-12-08 18:20:32');
+(5, 1, 2, '2023-12-09', 'INSERT', '2023-12-08 18:20:32'),
+(6, 4, 10, '2023-12-10', 'INSERT', '2023-12-10 06:21:02'),
+(7, 3, 13, '2023-12-10', 'INSERT', '2023-12-10 06:24:10'),
+(8, 4, 5, '2023-12-10', 'INSERT', '2023-12-10 06:39:36'),
+(9, 4, 4, '2023-12-10', 'INSERT', '2023-12-10 07:20:59');
 
 -- --------------------------------------------------------
 
@@ -359,10 +412,10 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `student_id`, `firstname`, `lastname`, `photo`, `course_id`, `created_on`) VALUES
-(1, 'QKZ473591628', 'Marinela Joy', 'Ibay', '', 1, '2023-12-09'),
-(2, 'OSY659073421', 'Daisy', 'Pajares', '', 1, '2023-12-09'),
-(3, 'RNT501962748', 'Jurilaine Anne', 'Pacamara', '', 1, '2023-12-09'),
-(4, 'LAT261539840', 'Aubrey Kate', 'Quinonez', '', 1, '2023-12-09');
+(1, 'QKZ473591628', 'Marinela Joy', 'Ibay', 'ID.jpg', 1, '2023-12-09'),
+(2, 'OSY659073421', 'Daisy', 'Pajares', 'daisy.jpg', 1, '2023-12-09'),
+(3, 'RNT501962748', 'Jurilaine Anne', 'Pacamara', 'jurilaine.jpg', 1, '2023-12-09'),
+(4, 'LAT261539840', 'Aubrey Kate', 'Quinonez', 'aubrey.jpeg', 1, '2023-12-09');
 
 --
 -- Triggers `students`
@@ -392,7 +445,7 @@ CREATE TABLE `students_audit` (
   `firstname` varchar(25) NOT NULL,
   `lastname` varchar(25) NOT NULL,
   `action` varchar(50) NOT NULL,
-  `update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `update` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -402,12 +455,19 @@ CREATE TABLE `students_audit` (
 INSERT INTO `students_audit` (`id`, `student_id`, `firstname`, `lastname`, `action`, `update`) VALUES
 (2, 0, 'Daisy', 'Pajares', 'INSERT', '2023-12-08 18:21:59'),
 (3, 0, 'Jurilaine Anne', 'Pacamara', 'INSERT', '2023-12-08 18:31:38'),
-(4, 0, 'Aubrey Kate', 'Quinonez', 'INSERT', '2023-12-08 18:32:41');
+(4, 0, 'Aubrey Kate', 'Quinonez', 'INSERT', '2023-12-08 18:32:41'),
+(1, 0, 'Marinela Joy', 'Ibay', 'UPDATE', '2023-12-10 06:27:39'),
+(4, 0, 'Aubrey Kate', 'Quinonez', 'UPDATE', '2023-12-10 06:28:28'),
+(3, 0, 'Jurilaine Anne', 'Pacamara', 'UPDATE', '2023-12-10 06:29:01'),
+(2, 0, 'Daisy', 'Pajares', 'UPDATE', '2023-12-10 06:29:17'),
+(5, 0, 'Mary Joy', 'Bonganay', 'INSERT', '2023-12-15 16:01:06'),
+(5, 0, 'Mary Joy', 'Bonganay', 'DELETE', '2023-12-15 16:01:11');
 
 -- --------------------------------------------------------
 
 --
 -- Stand-in structure for view `student_view`
+-- (See below for the actual view)
 --
 CREATE TABLE `student_view` (
 `TOTAL_STUDENTS` bigint(21)
@@ -420,7 +480,7 @@ CREATE TABLE `student_view` (
 --
 DROP TABLE IF EXISTS `book_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `book_view`  AS  select count(`books`.`id`) AS `TOTAL_BOOKS` from `books` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `book_view`  AS SELECT count(`books`.`id`) AS `TOTAL_BOOKS` FROM `books``books`  ;
 
 -- --------------------------------------------------------
 
@@ -429,7 +489,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `library_summary_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `library_summary_view`  AS  select `books`.`isbn` AS `isbn`,`books`.`title` AS `title`,`books`.`author` AS `author`,`books`.`publisher` AS `publisher`,`category`.`name` AS `name` from (`books` join `category` on((`books`.`category_id` = `category`.`id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `library_summary_view`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, `books`.`author` AS `author`, `books`.`publisher` AS `publisher`, `category`.`name` AS `name` FROM (`books` join `category` on(`books`.`category_id` = `category`.`id`))  ;
 
 -- --------------------------------------------------------
 
@@ -438,7 +498,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `student_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `student_view`  AS  select count(`students`.`id`) AS `TOTAL_STUDENTS` from `students` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `student_view`  AS SELECT count(`students`.`id`) AS `TOTAL_STUDENTS` FROM `students``students`  ;
 
 --
 -- Indexes for dumped tables
@@ -495,36 +555,43 @@ ALTER TABLE `students`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
 --
 -- AUTO_INCREMENT for table `borrow`
 --
 ALTER TABLE `borrow`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
 --
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT for table `returns`
 --
 ALTER TABLE `returns`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 DELIMITER $$
 --
 -- Events
@@ -532,6 +599,7 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` EVENT `delete_event` ON SCHEDULE EVERY 1 WEEK STARTS '2023-12-09 02:39:48' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM returns WHERE date_return < CURDATE() - INTERVAL 30 DAY$$
 
 DELIMITER ;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
