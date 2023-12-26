@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 24, 2023 at 06:31 AM
+-- Generation Time: Dec 26, 2023 at 07:17 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -314,6 +314,20 @@ INSERT INTO `course` (`id`, `title`, `code`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `dashboard_view`
+-- (See below for the actual view)
+--
+CREATE TABLE `dashboard_view` (
+`student_id` varchar(15)
+,`firstname` varchar(50)
+,`lastname` varchar(50)
+,`date_borrow` date
+,`date_return` date
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `library_summary_view`
 -- (See below for the actual view)
 --
@@ -481,6 +495,15 @@ CREATE TABLE `student_view` (
 DROP TABLE IF EXISTS `book_view`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `book_view`  AS SELECT count(`books`.`id`) AS `TOTAL_BOOKS` FROM `books``books`  ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `dashboard_view`
+--
+DROP TABLE IF EXISTS `dashboard_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `dashboard_view`  AS SELECT `students`.`student_id` AS `student_id`, `students`.`firstname` AS `firstname`, `students`.`lastname` AS `lastname`, `borrow`.`date_borrow` AS `date_borrow`, `returns`.`date_return` AS `date_return` FROM ((`students` join `borrow` on(`borrow`.`student_id` = `students`.`id`)) join `returns` on(`returns`.`student_id` = `students`.`id`))  ;
 
 -- --------------------------------------------------------
 
